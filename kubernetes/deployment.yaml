@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: danklinux-website
+  namespace: danklinux
+  labels:
+    app: danklinux-website
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: danklinux-website
+  template:
+    metadata:
+      labels:
+        app: danklinux-website
+    spec:
+      containers:
+      - name: danklinux-website
+        image: replaceme
+        ports:
+          - containerPort: 80
