@@ -12,11 +12,9 @@ jobs:
       GITHUB_RUN_ID: ${{ github.run_id }}    
     steps:
       - uses: actions/checkout@master   
-      - name: Login to registry
-        uses: actions-hub/docker/login@master
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Get branch name (merge)
         if: github.event_name != 'pull_request'
@@ -28,13 +26,16 @@ jobs:
         shell: bash
         run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
 
-      - name: Build and tag
+      - name: Build and push image
         if: success()
-        run: docker build -t bbedward/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }} .
-
-      - name: Push image   
-        if: success()
-        run: docker push bbedward/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: ${{ matrix.platform }}
+          provenance: false
+          push: true
+          file: ./Dockerfile
+          tags: ghcr.io/AvengeMedia/danklinux-com:${{ needs.setup_env.outputs.branch_name }}-${{ env.GITHUB_RUN_ID }}-${{ matrix.arch }}
 
   deploy_website:
     name: Deploy danklinux.com
@@ -61,7 +62,7 @@ jobs:
       - name: Set image
         working-directory: ./kubernetes
         run: |
-          kustomize edit set image replaceme=bbedward/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          kustomize edit set image replaceme=ghcr.io/AvengeMedia/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
           kustomize build . > deployment-k.yaml
 
       - name: Deploy image to k8s cluster
