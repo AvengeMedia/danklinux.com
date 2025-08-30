@@ -7,7 +7,7 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             background-color: #1a1a1a;
             color: #CCBEFF;
             font-family: monospace;
@@ -16,89 +16,97 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            box-sizing: border-box;
         }
         
         .logo {
-            width: 544px;
-            height: 200px;
+            width: 100%;
+            max-width: 544px;
+            height: auto;
             margin-bottom: 60px;
         }
         
         .links {
             display: flex;
-            gap: 30px;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 600px;
         }
         
         .links a {
             color: #CCBEFF;
             text-decoration: none;
             font-size: 16px;
-            padding: 10px 20px;
+            padding: 10px;
             border: 1px solid #CCBEFF;
             border-radius: 4px;
             transition: all 0.3s ease;
             width: 180px;
             text-align: center;
+            box-sizing: border-box;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .links a:hover {
             background-color: #CCBEFF;
             color: #1a1a1a;
         }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 10px;
+            }
+            
+            .logo {
+                margin-bottom: 40px;
+            }
+            
+            .links {
+                gap: 8px;
+            }
+            
+            .links a {
+                flex: 1;
+                max-width: 160px;
+                padding: 8px;
+                font-size: 13px;
+            }
+        }
+        
+        .short-text {
+            display: none;
+        }
+        
+        @media (max-width: 520px) {
+            .links a {
+                flex: 1;
+                max-width: 110px;
+                padding: 8px;
+                font-size: 12px;
+            }
+            
+            .full-text {
+                display: none;
+            }
+            
+            .short-text {
+                display: inline;
+            }
+        }
     </style>
 </head>
 <body>
-    <svg class="logo" viewBox="0 0 136 50" xmlns="http://www.w3.org/2000/svg">
-        <!-- D -->
-        <rect x="0" y="5" width="24" height="8" fill="#CCBEFF"/>
-        <rect x="0" y="13" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="20" y="13" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="0" y="21" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="20" y="21" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="0" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="20" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="0" y="37" width="24" height="8" fill="#CCBEFF"/>
-        
-        <!-- A -->
-        <rect x="36" y="5" width="20" height="8" fill="#CCBEFF"/>
-        <rect x="32" y="13" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="52" y="13" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="32" y="21" width="28" height="8" fill="#CCBEFF"/>
-        <rect x="32" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="52" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="32" y="37" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="52" y="37" width="8" height="8" fill="#CCBEFF"/>
-        
-        <!-- N -->
-        <rect x="64" y="5" width="12" height="8" fill="#CCBEFF"/>
-        <rect x="92" y="5" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="64" y="13" width="16" height="8" fill="#CCBEFF"/>
-        <rect x="92" y="13" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="64" y="21" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="76" y="21" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="92" y="21" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="64" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="80" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="92" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="64" y="37" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="84" y="37" width="16" height="8" fill="#CCBEFF"/>
-        
-        <!-- K -->
-        <rect x="104" y="5" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="124" y="5" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="104" y="13" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="120" y="13" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="104" y="21" width="20" height="8" fill="#CCBEFF"/>
-        <rect x="104" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="120" y="29" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="104" y="37" width="8" height="8" fill="#CCBEFF"/>
-        <rect x="124" y="37" width="8" height="8" fill="#CCBEFF"/>
-    </svg>
+    <img class="logo" src="https://danklinux.com/assets/dank.svg" alt="Dank Linux Logo" />
     
     <div class="links">
-        <a href="https://github.com/AvengeMedia/DankMaterialShell">DankMaterialShell</a>
-        <a href="https://github.com/AvengeMedia/dankinstall">Install & Manage</a>
-        <a href="https://github.com/AvengeMedia/dgop">dgop - monitoring</a>
+        <a href="https://github.com/AvengeMedia/DankMaterialShell"><span class="full-text">DankMaterialShell</span><span class="short-text">Shell</span></a>
+        <a href="https://github.com/AvengeMedia/danklinux"><span class="full-text">Install & Manage</span><span class="short-text">Manage</span></a>
+        <a href="https://github.com/AvengeMedia/dgop"><span class="full-text">dgop - monitoring</span><span class="short-text">dgop</span></a>
     </div>
 </body>
 </html>
