@@ -59,7 +59,7 @@ jobs:
           provenance: false
           push: true
           file: ./Dockerfile
-          tags: ghcr.io/AvengeMedia/danklinux-com:${{ needs.setup_env.outputs.branch_name }}-${{ env.GITHUB_RUN_ID }}
+          tags: ghcr.io/avengemedia/danklinux-com:${{ needs.setup_env.outputs.branch_name }}-${{ env.GITHUB_RUN_ID }}
 
   deploy_website:
     name: Deploy danklinux.com
@@ -86,7 +86,7 @@ jobs:
       - name: Set image
         working-directory: ./kubernetes
         run: |
-          kustomize edit set image replaceme=ghcr.io/AvengeMedia/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          kustomize edit set image replaceme=ghcr.io/avengemedia/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
           kustomize build . > deployment-k.yaml
 
       - name: Deploy image to k8s cluster
