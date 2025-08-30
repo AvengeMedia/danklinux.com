@@ -34,12 +34,10 @@ jobs:
 
       - name: Push image   
         if: success()
-        uses: actions-hub/docker@master
-        with:
-          args: push bbedward/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+        run: docker push bbedward/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
 
   deploy_website:
-    name: Deploy natrium.io
+    name: Deploy danklinux.com
     needs: build_and_publish
     runs-on: ubuntu-latest
     env:
@@ -61,9 +59,9 @@ jobs:
         run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
 
       - name: Set image
-        working-directory: ./kubernetes/main
+        working-directory: ./kubernetes
         run: |
-          kustomize edit set image replaceme=appditto/natrium-io:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
+          kustomize edit set image replaceme=bbedward/danklinux-com:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
           kustomize build . > deployment-k.yaml
 
       - name: Deploy image to k8s cluster
@@ -71,41 +69,6 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f ./kubernetes/main/deployment-k.yaml
-
-  deploy_help_website:
-    name: Deploy help.natrium.io
-    needs: build_and_publish_help
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_RUN_ID: ${{ github.run_id }}
-    steps:
-      - uses: actions/checkout@master   
-      - uses: imranismail/setup-kustomize@v1
-        with:
-          kustomize-version: "3.5.4"
-
-      - name: Get branch name (merge)
-        if: github.event_name != 'pull_request'
-        shell: bash
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/} | tr / -)" >> $GITHUB_ENV
-
-      - name: Get branch name (pull request)
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: echo "BRANCH_NAME=$(echo ${GITHUB_HEAD_REF} | tr / -)" >> $GITHUB_ENV
-
-      - name: Set image
-        working-directory: ./kubernetes/help
-        run: |
-          kustomize edit set image replaceme=appditto/help-natrium-io:${{ env.BRANCH_NAME }}-${{ env.GITHUB_RUN_ID }}
-          kustomize build . > deployment-k.yaml
-
-      - name: Deploy image to k8s cluster
-        uses: bbedward/kubectl@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: apply -f ./kubernetes/help/deployment-k.yaml
+          args: apply -f ./kubernetes/deployment-k.yaml
 
       
